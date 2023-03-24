@@ -21,6 +21,8 @@ public class KthLargestAndSmallest {
 
     System.out.println("Kth largest: " + kthLargest(arr, k));
     System.out.println("Kth Smallest: " + kthSmallest(arr, k));
+
+    sc.close();
   }
 
   public static int kthLargest (int arr[], int k) {
