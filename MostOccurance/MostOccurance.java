@@ -4,9 +4,9 @@ import java.util.HashMap;
 
 public class MostOccurance {
 
-  static char maxOccuringCharacter(String s) {
+  static char maxOccuringCharacter(String s) throws EmptyStringException {
     if (s == null || s.isEmpty()) {
-      throw new IllegalArgumentException("Input cannot be null or empty");
+      throw new EmptyStringException("Input cannot be null or empty");
     }
 
     HashMap<Character, Integer> map = new HashMap<>();
@@ -30,10 +30,10 @@ public class MostOccurance {
   }
 
   public static void main(String[] args) {
-    String s = "green";
+    String s = "greener";
     try {
       System.out.println(maxOccuringCharacter(s));
-    } catch (IllegalArgumentException e) {
+    } catch (EmptyStringException e) {
       System.err.println(e.getMessage());
     }
   }
