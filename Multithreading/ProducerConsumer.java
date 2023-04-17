@@ -84,12 +84,10 @@ class Consumer implements Runnable {
 
 public class ProducerConsumer {
   public static void main(String[] args) {
-    List<Integer> buffer = new ArrayList<>(); // shared buffer to pass data between producer and consumer
-    int bufferSize = 5; // max size of shared buffer
-    int maxExecutions = 10; // will run total 10 times
+    List<Integer> buffer = new ArrayList<>();
 
-    Thread producer = new Thread(new Producer(buffer, bufferSize, maxExecutions));
-    Thread consumer = new Thread(new Consumer(buffer, maxExecutions));
+    Thread producer = new Thread(new Producer(buffer, 5, 10));
+    Thread consumer = new Thread(new Consumer(buffer, 10));
 
     producer.start();
     consumer.start();
