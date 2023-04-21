@@ -14,9 +14,12 @@ public class CheckEmptyList {
     Optional.ofNullable(intList).filter(list -> !list.isEmpty())
         .ifPresent(list -> list.forEach(System.out::println));
 
+    Optional.ofNullable(intList).filter(list -> !list.isEmpty())
+        .ifPresentOrElse(list -> list.forEach(System.out::println), System.out::println);
+
     System.out.println("Second List");
 
     Optional.ofNullable(intList2).filter(list -> !list.isEmpty())
-        .ifPresent(list -> list.forEach(System.out::println));
+        .ifPresentOrElse(list -> list.forEach(System.out::println), System.out::println);
   }
 }

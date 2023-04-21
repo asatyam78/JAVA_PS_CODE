@@ -3,6 +3,7 @@ package Java8;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class StreamsDemoUsingTraderTransaction {
@@ -20,12 +21,16 @@ public class StreamsDemoUsingTraderTransaction {
                 new Transaction(mario, 2012, 700),
                 new Transaction(alan, 2012, 950));
 
+        // Predicate<Transaction> inYear2011 = (t) -> t.getYear() == 2011;
+        // Predicate<Trader> inCambridge = (t) -> t.getCity().equals("Cambridge");
+        // Predicate<Trader> inMilan = (t) -> t.getCity().equals("Milan");
+
         // 1. Find all transactions in the year 2011 and sort them by value (small to
         // high).
 
         System.out.println("Answer 1");
         transactions.stream()
-                .filter(t -> t.getYear() == 2011)
+                .filter(new Year2011Predicate())
                 .sorted(Comparator.comparing(Transaction::getValue))
                 .forEach(System.out::println);
 
@@ -42,7 +47,7 @@ public class StreamsDemoUsingTraderTransaction {
         System.out.println("Answer 3");
         transactions.stream()
                 .map(Transaction::getTrader)
-                .filter(t -> t.getCity().equals("Cambridge"))
+                .filter(new CityPredicateTrader("Cambridge"))
                 .map(Trader::getName)
                 .sorted().distinct()
                 .forEach(System.out::println);
@@ -61,13 +66,13 @@ public class StreamsDemoUsingTraderTransaction {
         System.out.println("Answer 5");
         System.out.println(transactions.stream()
                 .map(Transaction::getTrader)
-                .anyMatch(t -> t.getCity().equals("Milan")));
+                .anyMatch(new CityPredicateTrader("Milan")));
 
         // 6. Print all transactions’ values from the traders living in Cambridge.
 
         System.out.println("Answer 6");
         transactions.stream()
-                .filter(t -> t.getTrader().getCity().equals("Cambridge"))
+                .filter(new CityPredicateTransaction("Cambridge"))
                 .forEach(System.out::println);
 
         // 7. What’s the highest value of all the transactions?
@@ -75,14 +80,48 @@ public class StreamsDemoUsingTraderTransaction {
         System.out.println("Answer 7");
         System.out.println(transactions.stream()
                 .mapToInt(Transaction::getValue)
-                .max());
+                .max().getAsInt());
 
         // 8. Find the transaction with the smallest value
 
         System.out.println("Answer 8");
         System.out.println(transactions.stream()
                 .mapToInt(Transaction::getValue)
-                .min());
+                .min().getAsInt());
+    }
+}
+
+class Year2011Predicate implements Predicate<Transaction> {
+
+    @Override
+    public boolean test(Transaction transaction) {
+        return transaction.getYear() == 2011;
+    }
+}
+
+class CityPredicateTrader implements Predicate<Trader> {
+    private String cityName;
+
+    public CityPredicateTrader(String cityName) {
+        this.cityName = cityName;
+    }
+
+    @Override
+    public boolean test(Trader trader) {
+        return trader.getCity().equalsIgnoreCase(cityName);
+    }
+}
+
+class CityPredicateTransaction implements Predicate<Transaction> {
+    private String cityName;
+
+    public CityPredicateTransaction(String cityName) {
+        this.cityName = cityName;
+    }
+
+    @Override
+    public boolean test(Transaction transaction) {
+        return transaction.getTrader().getCity().equalsIgnoreCase(cityName);
     }
 }
 
